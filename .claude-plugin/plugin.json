@@ -1,0 +1,15 @@
+{
+  "name": "repo-crew",
+  "displayName": "repo-crew",
+  "version": "0.1.0",
+  "description": "Audit your codebase and generate a crew of specialist subagents, an orchestrator routing block in CLAUDE.md, committed per-domain knowledge files, a locked-decisions ledger, and a shipping gate. The audit decides how many agents you need.",
+  "author": {
+    "name": "Suryansh Gupta",
+    "email": "suryanshgupta9933@gmail.com",
+    "url": "https://github.com/suryanshgupta9933"
+  },
+  "homepage": "https://github.com/suryanshgupta9933/repo-crew",
+  "repository": "https://github.com/suryanshgupta9933/repo-crew",
+  "license": "MIT",
+  "keywords": ["subagents", "orchestrator", "context-management", "decision-log", "agents", "monorepo", "knowledge-base"]
+}

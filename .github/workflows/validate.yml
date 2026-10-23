@@ -1,0 +1,84 @@
+name: validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: JSON manifests parse
+        run: |
+          python -c "import json;[json.load(open(f)) for f in ('.claude-plugin/plugin.json','.claude-plugin/marketplace.json','skills/repo-crew/evals/evals.json')]"
+
+      - name: Scripts compile
+        run: python -m py_compile skills/repo-crew/scripts/*.py
+
+      - name: Skill frontmatter is portable
+        run: |
+          python - <<'PY'
+          import re, sys, pathlib
+
+          # claude.ai and the Skills API hard-error on any frontmatter key outside
+          # the Agent Skills standard set, so keep the skill uploadable.
+          ALLOWED = {"name", "description", "license", "compatibility", "metadata", "allowed-tools"}
+          path = pathlib.Path("skills/repo-crew/SKILL.md")
+          text = path.read_text()
+          m = re.match(r"^---\n(.*?)\n---\n", text, re.S)
+          if not m:
+              sys.exit("SKILL.md has no frontmatter block")
+          body = m.group(1)
+
+          keys = set(re.findall(r"^([A-Za-z0-9_-]+):", body, re.M))
+          extra = keys - ALLOWED
+          if extra:
+              sys.exit(f"non-standard frontmatter keys (break claude.ai packaging): {sorted(extra)}")
+
+          def value(name):
+              got = re.search(r"^" + name + r": (.*)$", body, re.M)
+              return got.group(1).strip() if got else ""
+
+          name, desc, compat = value("name"), value("description"), value("compatibility")
+          if name != path.parent.name:
+              sys.exit(f"name {name!r} must match directory {path.parent.name!r}")
+          if not desc or len(desc) > 1024:
+              sys.exit(f"description must be 1-1024 chars, got {len(desc)}")
+          if len(compat) > 500:
+              sys.exit(f"compatibility must be <=500 chars, got {len(compat)}")
+          print("frontmatter ok")
+          PY
+
+      - name: Version matches CHANGELOG
+        run: |
+          python - <<'PY'
+          import json, re, sys
+          plugin = json.load(open(".claude-plugin/plugin.json"))
+          version = plugin.get("version")
+          if not version:
+              sys.exit("plugin.json has no version; users will never receive updates")
+          head = re.search(r"^## (\S+)", open("CHANGELOG.md").read(), re.M)
+          if not head:
+              sys.exit("CHANGELOG.md has no version heading")
+          if head.group(1) != version:
+              sys.exit(f"plugin.json version {version} != CHANGELOG top version {head.group(1)}")
+          print(f"version {version} in sync")
+          PY
+
+      - name: Smoke test scripts on this repo
+        run: |
+          python skills/repo-crew/scripts/survey_repo.py . > /dev/null
+          python skills/repo-crew/scripts/check_drift.py . --json > /dev/null
+
+      - name: Plugin manifest validates
+        run: |
+          npm install -g @anthropic-ai/claude-code
+          claude plugin validate . --strict

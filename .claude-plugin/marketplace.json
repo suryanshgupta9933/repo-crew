@@ -1,0 +1,15 @@
+{
+  "name": "repo-crew-marketplace",
+  "description": "Marketplace for repo-crew, a plugin that audits your codebase and generates a crew of specialist agents with committed per-domain knowledge and a decision ledger.",
+  "owner": {
+    "name": "Suryansh Gupta",
+    "email": "suryanshgupta9933@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "repo-crew",
+      "source": "./",
+      "description": "Audit your codebase and generate a crew of specialist subagents, an orchestrator routing block, committed per-domain knowledge files, a locked-decisions ledger, and a shipping gate."
+    }
+  ]
+}
