@@ -73,10 +73,12 @@ jobs:
           print(f"version {version} in sync")
           PY
 
-      - name: Smoke test scripts on this repo
+      - name: Smoke test scripts
         run: |
           python skills/repo-crew/scripts/survey_repo.py . > /dev/null
-          python skills/repo-crew/scripts/check_drift.py . --json > /dev/null
+          # The fixture's verified_at is a made-up sha, so drift reports it as stale
+          # and exits nonzero by design. Assert that a report was produced.
+          python skills/repo-crew/scripts/check_drift.py examples/sample-output --json | grep -q '"knowledge"'
 
       - name: Plugin manifest validates
         run: |

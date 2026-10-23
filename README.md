@@ -126,7 +126,7 @@ python skills/repo-crew/scripts/check_drift.py .                    # stale know
 python skills/repo-crew/scripts/check_drift.py . --stamp docs/crew/<agent>.md   # after you reconcile a file
 ```
 
-Exit code is nonzero when something is stale or uncovered, so `check_drift.py` can run in CI.
+Exit code is nonzero when something is stale or uncovered, so `check_drift.py` can run in CI. It also exits nonzero when there is no crew to check yet.
 
 ## Repo layout
 
