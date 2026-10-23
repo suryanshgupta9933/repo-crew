@@ -9,6 +9,8 @@ The audit decides how many agents your repo needs. A small CLI might get two. A 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Plugin](https://img.shields.io/badge/plugin-repo--crew-blue)](https://github.com/suryanshgupta9933/repo-crew)
 
+![How repo-crew works](assets/how-it-works.svg)
+
 ## The problem
 
 AI-assisted coding makes a solo dev fast, until the project grows:
@@ -19,6 +21,8 @@ AI-assisted coding makes a solo dev fast, until the project grows:
 - Shipping steps (CI, PR, doc updates) depend on whether you remembered to ask.
 
 ## What you get
+
+![What lands in your repo](assets/crew-layout.svg)
 
 ```
 .claude/agents/<name>.md        one specialist per domain (short prompt, sharp router description)
@@ -140,6 +144,7 @@ skills/repo-crew/
   scripts/                    survey_repo.py, check_drift.py — standard library only
   evals/evals.json            example prompts with expected behaviour
 examples/sample-output/       illustrative output for a made-up project
+assets/                       diagrams used in this README
 .github/workflows/            CI: manifest validation, script compile, version sync
 ```
 

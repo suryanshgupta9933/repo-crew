@@ -49,13 +49,15 @@ MANIFEST_NAMES = {
     "tsconfig.json", "vite.config.ts", "vite.config.js", "webpack.config.js",
     "next.config.js", "terraform.tf", "serverless.yml",
 }
+AGENT_CONFIG_DIRS = (
+    ".claude/agents/", ".claude/skills/", ".claude/rules/", "docs/crew/",
+)
 CI_FILES = {
     ".gitlab-ci.yml", "Makefile", "makefile", "justfile", "Jenkinsfile",
     "azure-pipelines.yml", "bitbucket-pipelines.yml", ".pre-commit-config.yaml",
     "tox.ini", "noxfile.py", "Taskfile.yml", ".travis.yml",
 }
-ENTRY_NAMES = {
-    "main.py", "__main__.py", "app.py", "server.py", "wsgi.py", "asgi.py", "cli.py",
+ENTRY_NAMES = {    "main.py", "__main__.py", "app.py", "server.py", "wsgi.py", "asgi.py", "cli.py",
     "index.js", "index.ts", "index.tsx", "main.ts", "main.js", "main.tsx", "app.ts",
     "app.tsx", "server.ts", "server.js", "background.js", "background.ts",
     "service-worker.js", "service_worker.js", "content.js", "content.ts", "popup.js",
@@ -86,6 +88,26 @@ def list_files(root):
         for fn in fns:
             files.append(os.path.relpath(os.path.join(dp, fn), root).replace(os.sep, "/"))
     return files, False
+
+
+def find_agent_config(root):
+    """Find agent and crew config in the working tree.
+
+    These paths are commonly gitignored (`.claude/` usually is), so `git ls-files`
+    alone would report no existing crew for a repo that already has one.
+    """
+    found = set()
+    for dp, dns, fns in os.walk(root):
+        dns[:] = [d for d in dns if d not in SKIP_DIRS]
+        rel_dir = os.path.relpath(dp, root).replace(os.sep, "/")
+        rel_dir = "" if rel_dir == "." else rel_dir
+        for fn in fns:
+            rel = f"{rel_dir}/{fn}" if rel_dir else fn
+            if rel in ("CLAUDE.md", "AGENTS.md") or rel.endswith("/CLAUDE.md"):
+                found.add(rel)
+            elif rel.startswith(AGENT_CONFIG_DIRS):
+                found.add(rel)
+    return found
 
 
 def count_loc(path):
@@ -221,10 +243,10 @@ def main():
     targets = {f: make_targets(root, f) for f in ci if os.path.basename(f) in ("Makefile", "makefile", "justfile")}
 
     agent_cfg = sorted(
-        f for f in files
-        if f in ("CLAUDE.md", "AGENTS.md") or f.endswith("/CLAUDE.md")
-        or f.startswith(".claude/agents/") or f.startswith(".claude/skills/")
-        or f.startswith(".claude/rules/") or f.startswith("docs/crew/")
+        set(f for f in files
+            if f in ("CLAUDE.md", "AGENTS.md") or f.endswith("/CLAUDE.md")
+            or f.startswith(AGENT_CONFIG_DIRS))
+        | find_agent_config(root)
     )
     docs = sorted(
         f for f in files
