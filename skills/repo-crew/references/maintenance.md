@@ -31,10 +31,12 @@ For uncovered paths: decide whether they belong to an existing agent (extend `co
 
 Run when the repo changed shape: new runtime, big refactor, several new top-level directories, agents frequently misrouted, or every few months.
 
+**Scope:** an audit changes crew artifacts only — `.claude/agents/`, `docs/crew/`, the CLAUDE.md routing block. It does **not** change the repo's own source, scripts, CI, or dependencies. If the audit finds a broken script or a stale test, report it in the plan and let the user (or the relevant domain agent) fix it; do not edit it yourself. A crew that rewrites the repo it is auditing is not auditing.
+
 1. Re-run the survey and the drift check.
 2. Re-apply the three crew tests (`survey.md`) to every agent and to uncovered high-churn units. Note any that no longer pass.
 3. Check every `locked` decision against the code.
-4. Propose changes as a short plan: agents to add, split, merge, retire; knowledge files to refresh; decisions to confirm. Get the user's agreement before editing.
+4. Propose changes as a short plan: agents to add, split, merge, retire; knowledge files to refresh; decisions to confirm; and separately, any repo problems found (listed, not fixed). Get the user's agreement before editing.
 5. Apply, update ROSTER.md and the CLAUDE.md block, re-run routing evals, stamp refreshed files.
 
 ## Add, split, merge, retire

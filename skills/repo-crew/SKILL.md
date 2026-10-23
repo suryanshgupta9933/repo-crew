@@ -23,14 +23,22 @@ Why files, not memory alone: committed knowledge files are diffable, reviewable,
 
 ## Modes
 
-Pick the mode from the request; if unclear, assume **init** when no `docs/crew/ROSTER.md` exists, otherwise **audit**.
+**A crew is a repo-crew crew**: agents in `.claude/agents/` *plus* knowledge files in `docs/crew/` *plus* `docs/crew/ROSTER.md`. `docs/crew/ROSTER.md` is the marker.
 
 | Mode | When | Go to |
 |---|---|---|
-| init | No crew yet | Workflow below |
-| audit | Repo changed a lot; "do we have the right agents?" | `references/maintenance.md` |
+| init | No `docs/crew/ROSTER.md` | Workflow below |
+| audit | `docs/crew/ROSTER.md` exists; repo changed a lot; "do we have the right agents?" | `references/maintenance.md` |
 | refresh | Knowledge may be stale | `references/maintenance.md` |
 | add | Create/split/merge/retire one agent | `references/maintenance.md` |
+
+Choosing the mode:
+
+- If `docs/crew/ROSTER.md` does not exist, it is **init** — even if `.claude/agents/` already has files. Hand-written or third-party agents are not a crew.
+- If `docs/crew/ROSTER.md` exists, it is **audit** unless the user says the knowledge is stale (**refresh**) or names one agent to change (**add**).
+- When the request is explicit ("audit my agents"), honour the requested mode, but say which mode you picked and why in one line.
+
+Existing `.claude/agents/` files in init mode are **inputs, not output**. Read them, reuse the ones that still pass the crew tests, and never overwrite or delete one without saying so in the plan. If a hand-written agent and a proposed agent cover the same paths, propose a merge rather than two agents competing.
 
 ## Init workflow
 
