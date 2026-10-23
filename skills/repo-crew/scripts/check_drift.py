@@ -8,6 +8,8 @@ Usage:
 
 Knowledge files live in docs/crew/*.md (and docs/crew/shared/*.md) and carry
 frontmatter with `covers:` (glob list) and `verified_at:` (git sha).
+Paths that no agent owns on purpose are listed in .crewignore (one glob per
+line), so the uncovered-path report only shows real gaps.
 Only the standard library and git are needed.
 """
 import argparse
@@ -79,6 +81,17 @@ def glob_to_regex(g):
 
 def matches(path, regexes):
     return any(r.match(path) for r in regexes)
+
+
+def ignore_globs(root):
+    """Globs from .crewignore: paths no agent owns, on purpose."""
+    path = os.path.join(root, ".crewignore")
+    if not os.path.exists(path):
+        return []
+    with open(path, encoding="utf-8") as fh:
+        lines = [l.strip() for l in fh]
+    pats = [l for l in lines if l and not l.startswith("#")]
+    return [glob_to_regex(p) for p in pats]
 
 
 def knowledge_files(root):
@@ -159,9 +172,12 @@ def main():
                          status="stale" if hit else "fresh")
         report.append(entry)
 
+    ignored = ignore_globs(root)
     uncovered = collections.Counter()
     for f in tracked:
         if f.startswith(IGNORE_UNCOVERED) or f.endswith(IGNORE_SUFFIX) or "/" not in f:
+            continue
+        if matches(f, ignored):
             continue
         if not matches(f, all_regexes):
             parts = f.split("/")

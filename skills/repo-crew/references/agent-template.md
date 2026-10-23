@@ -77,6 +77,7 @@ verified_at: <git short sha at time of writing>
 
 ## Purpose and boundaries
 <2-4 lines: what this domain does, what it does not, where it hands off.>
+Owns: <the globs above, in words>. Not for: <adjacent areas and which agent does>.
 
 ## Map
 <Key entry points and files with one-line roles. Not a full tree.>

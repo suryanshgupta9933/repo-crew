@@ -90,10 +90,13 @@ docs/crew/shared/<topic>.md       shared knowledge, if several agents need it
 docs/crew/DECISIONS.md            decision ledger      (references/decisions.md)
 docs/crew/ROSTER.md               who exists, owns what, last audit
 docs/crew/routing-evals.md        routing test prompts (generated in step 5)
+.crewignore                       globs for paths no agent owns on purpose
 CLAUDE.md                         marker-delimited routing block (references/orchestrator-block.md)
 ```
 
 **Write crew artifacts and nothing else.** You are creating a crew for a repo, not working on the repo. Do not edit the repo's source, tests, scripts, CI config or dependencies; do not run its build or test suite. If the survey turned up problems in the repo itself (a broken script, a failing test, a stale dependency), list them in the final report under "Repo problems found" and leave them alone. If the repo's only conventions file is `AGENTS.md` rather than `CLAUDE.md`, write the routing block into `AGENTS.md` instead.
+
+Every path that no agent owns on purpose (generated code, vendored trees, throwaway demos, one-off scripts) goes in `.crewignore`, one glob per line. That keeps the drift check's uncovered-path report about real gaps instead of noise.
 
 Rules that make the crew work:
 

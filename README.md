@@ -31,6 +31,7 @@ docs/crew/shared/*.md           cross-cutting notes (architecture, data flow, st
 docs/crew/DECISIONS.md          decision ledger: locked / proposed / superseded, with the why
 docs/crew/ROSTER.md             who exists, what they own, why they exist
 docs/crew/routing-evals.md      test prompts that check the orchestrator routes correctly
+.crewignore                     globs for paths no agent owns on purpose
 CLAUDE.md                       a short routing block between markers (idempotent updates)
 ```
 
@@ -124,13 +125,15 @@ Details: [`skills/repo-crew/references/survey.md`](skills/repo-crew/references/s
 
 ## Keeping it fresh
 
+The scripts live in the plugin, so run them from the repo you want to check:
+
 ```bash
-python skills/repo-crew/scripts/survey_repo.py .                    # re-survey the repo
-python skills/repo-crew/scripts/check_drift.py .                    # stale knowledge + uncovered paths
-python skills/repo-crew/scripts/check_drift.py . --stamp docs/crew/<agent>.md   # after you reconcile a file
+python <plugin>/skills/repo-crew/scripts/survey_repo.py .                    # re-survey the repo
+python <plugin>/skills/repo-crew/scripts/check_drift.py .                    # stale knowledge + uncovered paths
+python <plugin>/skills/repo-crew/scripts/check_drift.py . --stamp docs/crew/<agent>.md   # after you reconcile a file
 ```
 
-Exit code is nonzero when something is stale or uncovered, so `check_drift.py` can run in CI. It also exits nonzero when there is no crew to check yet.
+Exit code is nonzero when something is stale or when a path is covered by no knowledge file, so `check_drift.py` can run in CI. Paths that no agent owns on purpose go in `.crewignore` (one glob per line) so the uncovered report shows real gaps only. It also exits nonzero when there is no crew to check yet.
 
 ## Repo layout
 
