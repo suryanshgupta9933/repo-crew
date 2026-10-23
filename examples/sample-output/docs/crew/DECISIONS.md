@@ -2,6 +2,15 @@
 
 Index: D-001 One service worker owns run state [locked] | D-003 Panel never holds page content [locked] | D-007 Prefer SSE over websockets [proposed]
 
+## D-001: One service worker owns run state
+- status: locked
+- date: 2026-09-12
+- areas: side-panel-ui, agent-harness
+- decision: The service worker holds run state; the panel is a stateless view over the message bus.
+- why: The panel is destroyed when closed, so state kept only there is lost mid-run.
+- consequences: No run state in panel component memory; the worker is the single owner.
+- revisit if: never
+
 ## D-003: Panel never holds page content or credentials
 - status: locked
 - date: 2026-09-12

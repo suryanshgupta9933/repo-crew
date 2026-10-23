@@ -4,6 +4,7 @@
 - Agent file template
 - Writing the `description` (the router)
 - Knowledge file template
+- Shared knowledge file template
 - What belongs in a knowledge file
 - Optional: `memory:` field
 
@@ -26,8 +27,9 @@ You do not own: <adjacent areas and which agent does>.
 1. Read `docs/crew/<slug>.md` fully. It is your long-term memory.
 2. Read any `docs/crew/shared/*.md` it links to that the task touches.
 3. Scan `docs/crew/DECISIONS.md` for locked entries tagged with your area.
-4. Run `git log --oneline -10 -- <your globs>` to see recent changes. If the
-   knowledge file's `verified_at` is far behind, say so in your report.
+4. Run `git log --oneline -10 -- <your globs>` to see recent changes. If
+   `git log -1 <verified_at>` predates changes to your globs, say so in your
+   report.
 
 ## Working rules
 - <3-6 rules specific to this domain; the invariants that matter most.>
@@ -100,8 +102,23 @@ verified_at: <git short sha at time of writing>
 - <things the next session should confirm>
 ```
 
-## What belongs in a knowledge file
+## Shared knowledge file template
 
+Save as `docs/crew/shared/<topic>.md`. Shared notes carry `verified_at` but **no `covers`** — they are not a path owner, so the drift checker only tracks their freshness.
+
+```markdown
+---
+name: <topic>
+owner: <slug of the agent that maintains it>
+verified_at: <git short sha at time of writing>
+---
+
+# <Topic>
+
+<The cross-cutting fact: architecture, data flow, stack, shared vocabulary.>
+```
+
+## What belongs in a knowledge file
 Include: invariants, ordering/timing constraints, gotchas that already bit someone, rationale for non-obvious choices, contracts with other domains, exact verify commands, "do not touch" zones.
 
 Exclude: code listings, full directory trees, anything obvious from a quick read, vague aspirations ("keep code clean"), duplicated content already in shared notes (link instead).

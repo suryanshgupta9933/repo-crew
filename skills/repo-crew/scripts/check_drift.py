@@ -105,8 +105,10 @@ def stamp(root, file):
         text = fh.read()
     if re.search(r"^verified_at:.*$", text, re.M):
         text = re.sub(r"^verified_at:.*$", f"verified_at: {head}", text, count=1, flags=re.M)
-    else:
+    elif re.match(r"^---\n", text):
         text = re.sub(r"^---\n", f"---\nverified_at: {head}\n", text, count=1)
+    else:
+        sys.exit(f"{file} has no frontmatter block to stamp")
     with open(path, "w", encoding="utf-8") as fh:
         fh.write(text)
     print(f"stamped {file} verified_at={head}")
@@ -134,6 +136,8 @@ def main():
     report = []
     for rel, fm in kfiles:
         covers = fm.get("covers") or []
+        if isinstance(covers, str):
+            covers = [covers]
         regs = [glob_to_regex(c) for c in covers]
         all_regexes += regs
         sha = fm.get("verified_at", "")
@@ -182,7 +186,7 @@ def main():
             print(f"- {d}: {n} files")
         if not uncovered:
             print("- none")
-    stale = any(e["status"] not in ("fresh",) for e in report)
+    stale = any(e["status"] not in ("fresh", "no-covers") for e in report)
     sys.exit(1 if stale or uncovered else 0)
 
 

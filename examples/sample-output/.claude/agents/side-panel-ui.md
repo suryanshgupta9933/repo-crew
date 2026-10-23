@@ -12,7 +12,8 @@ You do not own: the agent loop (agent-harness), manifest and permissions (securi
 1. Read `docs/crew/side-panel-ui.md` fully. It is your long-term memory.
 2. Read `docs/crew/shared/message-contract.md` if the task touches panel <-> worker messages.
 3. Scan `docs/crew/DECISIONS.md` for locked entries tagged `side-panel-ui`.
-4. Run `git log --oneline -10 -- extension/sidepanel/` and note if `verified_at` is far behind.
+4. Run `git log --oneline -10 -- extension/sidepanel/` and note if `git log -1 <verified_at>`
+   predates changes to those paths.
 
 ## Working rules
 - Never read page content or credentials into panel state; the panel renders summaries only (D-003).

@@ -40,6 +40,12 @@ Choosing the mode:
 
 Existing `.claude/agents/` files in init mode are **inputs, not output**. Read them, reuse the ones that still pass the crew tests, and never overwrite or delete one without saying so in the plan. If a hand-written agent and a proposed agent cover the same paths, propose a merge rather than two agents competing.
 
+## Ground rules
+
+- **No user answering is not a stop.** When the plan or the interview needs an answer and none comes, proceed with the reasonable default, mark the affected facts `[inferred]`, and list them as open questions in the final report. The one exception is a conflict with a `locked` decision: that must halt and wait for the user.
+- **Never commit or push** the target repo's changes unless asked.
+- **Never edit the target repo's own source** — see "Write crew artifacts and nothing else" in step 4.
+
 ## Init workflow
 
 ### 1. Survey (read-only)
@@ -87,6 +93,8 @@ docs/crew/routing-evals.md        routing test prompts (generated in step 5)
 CLAUDE.md                         marker-delimited routing block (references/orchestrator-block.md)
 ```
 
+**Write crew artifacts and nothing else.** You are creating a crew for a repo, not working on the repo. Do not edit the repo's source, tests, scripts, CI config or dependencies; do not run its build or test suite. If the survey turned up problems in the repo itself (a broken script, a failing test, a stale dependency), list them in the final report under "Repo problems found" and leave them alone. If the repo's only conventions file is `AGENTS.md` rather than `CLAUDE.md`, write the routing block into `AGENTS.md` instead.
+
 Rules that make the crew work:
 
 - **Agent prompts stay short; knowledge lives in the knowledge file.** The prompt is paid for on every dispatch and is hard to keep current. The knowledge file is read on demand, edited by the owning agent, and checkable by script.
@@ -97,15 +105,21 @@ Rules that make the crew work:
 
 ### 5. Verify routing
 
-Generate `docs/crew/routing-evals.md`: for each agent, 3 realistic user requests that should route to it, plus 3-5 cross-domain requests with the expected primary agent and handoffs. Then test: for each prompt, state which agent the orchestrator block would dispatch and why; for any miss, fix the agent `description` or the routing table, not the prompt. If subagents are available, additionally smoke-test each agent with a read-only question about its domain and confirm it opens its knowledge file and answers consistently with it. Details in `references/maintenance.md`.
+Generate `docs/crew/routing-evals.md`: 3 realistic user requests per agent, 3-5 cross-domain requests with the expected primary agent and handoffs, 2 requests that conflict with a locked decision, and 1-2 "ship it" requests. Then test: for each prompt, state which agent the orchestrator block would dispatch and why; for any miss, fix the agent `description` or the routing table, not the prompt. If subagents are available, additionally smoke-test each agent with a read-only question about its domain and confirm it opens its knowledge file and answers consistently with it. Details in `references/maintenance.md`.
 
 ### 6. Report
 
-Tell the user what was created, what was marked `[inferred]` and needs their confirmation, which decisions are `proposed` vs `locked`, and the one command to check drift later. Do not commit or push unless asked; suggest committing the crew in its own PR.
+Tell the user what was created, what was marked `[inferred]` and needs their confirmation, which decisions are `proposed` vs `locked`, any repo problems you found but did not fix, and the one command to check drift later — using the absolute path to this skill's script, since it lives in the plugin, not in the target repo:
+
+```bash
+python3 <plugin-path>/skills/repo-crew/scripts/check_drift.py <target-repo>
+```
+
+Do not commit or push unless asked; suggest committing the crew in its own PR.
 
 ## Deciding the crew (summary)
 
-An agent exists only if it passes all three: **ownership** (nameable path globs), **knowledge density** (several non-obvious invariants/gotchas a fresh generalist would likely get wrong), and **traffic or blast radius** (touched often, or costly when wrong). Failing candidates become sections in a neighbor's knowledge file or a shared knowledge file. Split an agent when its knowledge file outgrows ~150 lines or it straddles runtimes, languages or trust boundaries. Full criteria: `references/survey.md`.
+A *domain* agent exists only if it passes all three: **ownership** (nameable path globs), **knowledge density** (several non-obvious invariants/gotchas a fresh generalist would likely get wrong), and **traffic or blast radius** (touched often, or costly when wrong). Failing candidates become sections in a neighbor's knowledge file or a shared knowledge file. Cross-cutting roles (docs keeper, shipper, reviewer, architect, security, QA, release) answer to the inclusion criteria in `references/core-roles.md` instead. Split an agent when its knowledge file outgrows ~150 lines or it straddles runtimes, languages or trust boundaries. Full criteria: `references/survey.md`.
 
 ## Truthfulness rules for knowledge files
 

@@ -16,10 +16,10 @@ Domain agents own slices of the repo. Cross-cutting roles own a *concern* that s
 
 **Include:** almost always. It is what keeps the other agents coherent over time.
 
-**Owns:** `docs/crew/DECISIONS.md`, `docs/crew/ROSTER.md`, shared knowledge files, README/docs updates, applying knowledge-file updates proposed by other agents, running the drift check.
+**Owns:** `docs/crew/**` — `DECISIONS.md`, `ROSTER.md`, shared knowledge files — plus applying knowledge-file updates proposed by other agents and running the drift check. It edits the repo's own README or docs only when the user asks for it.
 
 **Rules:**
-- Records a decision only when the user states or confirms it; otherwise logs it as `proposed`.
+- Records a decision only when the user states or confirms it; otherwise logs it as `proposed` (see `decisions.md`).
 - On every handoff received, decides which docs/knowledge/ledger entries change and edits them, bumping `verified_at` via `check_drift.py --stamp`.
 - Flags contradictions between a requested change and a `locked` decision back to the orchestrator instead of resolving them.
 
@@ -31,7 +31,7 @@ Domain agents own slices of the repo. Cross-cutting roles own a *concern* that s
 
 **Protocol:**
 1. Confirm the work is on a feature branch; never push directly to the default branch.
-2. Run the full local gate that mirrors CI (lint, types, tests, build). Fix or report failures; never skip, weaken or disable a check to get green.
+2. Run the full local gate that mirrors CI (lint, types, tests, build). Fix failures it caused, or report them with the failing command and output; never skip, weaken or disable a check to get green. It does not fix product source outside its own domain.
 3. Check the diff against `DECISIONS.md` for locked-decision violations; stop and report if any.
 4. Open a PR (e.g. via `gh`) with a body listing: what changed and why, which domains were touched, gate results, decisions referenced, follow-ups.
 5. Return a `HANDOFF` block asking the orchestrator to dispatch the docs-and-decisions keeper (always) plus any owner whose knowledge file `covers` changed paths.

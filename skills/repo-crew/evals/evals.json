@@ -1,11 +1,13 @@
 {
   "skill_name": "repo-crew",
   "evals": [
-    {"id": 1, "prompt": "My repo (a Chrome side-panel extension plus a Python server that runs a browser-automation agent) is getting too big for one session and Claude keeps forgetting earlier decisions. Audit it and set up specialist agents with an orchestrator.",
-     "expected_output": "Survey run; Crew Plan with justified agents and a considered-and-merged list; files under .claude/agents and docs/crew; CLAUDE.md block between markers; DECISIONS.md with user-stated entries locked and inferred ones proposed; routing evals written.", "files": []},
+    {"id": 1, "prompt": "My repo (a Chrome side-panel extension plus a Python server that runs a browser-automation agent) is getting too big for one session and Claude keeps forgetting earlier decisions. Set up specialist agents with an orchestrator.",
+     "expected_output": "Survey run; Crew Plan with justified agents and a considered-and-merged list; files under .claude/agents and docs/crew; CLAUDE.md block between markers; DECISIONS.md with user-stated entries locked and inferred ones proposed; routing evals written.", "files": [".claude/agents/", "docs/crew/DECISIONS.md", "docs/crew/ROSTER.md", "docs/crew/routing-evals.md"]},
     {"id": 2, "prompt": "Tiny repo: one 800-line Python CLI, a pytest suite and a GitHub Actions workflow. Can you split it into agents like the big projects do?",
-     "expected_output": "Small crew (about 2), explicitly declining to invent more; shipper gate derived from the workflow file rather than invented.", "files": []},
+     "expected_output": "Small crew (about 2-3), explicitly declining to invent more; shipper gate derived from the workflow file rather than invented.", "files": [".claude/agents/"]},
     {"id": 3, "prompt": "I already have docs/crew set up from a few months ago. Lots of new directories since then. Are the agents still right?",
-     "expected_output": "Audit mode: runs check_drift.py and the survey, re-applies the three tests, checks locked decisions against code, proposes add/split/merge/retire and asks for agreement before editing.", "files": []}
+     "expected_output": "Audit mode: runs check_drift.py and the survey, re-applies the three tests, checks locked decisions against code, proposes add/split/merge/retire and asks for agreement before editing.", "files": ["docs/crew/ROSTER.md"]},
+    {"id": 4, "prompt": "Set up a crew for this repo. Don't ask me anything, just decide and write the files.",
+     "expected_output": "Proceeds without waiting for answers: unanswered facts are tagged [inferred] and listed as open questions; no locked decision is invented; the target repo's own source is not modified.", "files": ["docs/crew/ROSTER.md"]}
   ]
 }

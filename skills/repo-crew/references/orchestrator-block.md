@@ -2,6 +2,8 @@
 
 The main conversation is the orchestrator. It should route and integrate, not read the whole repo. Insert the block below into CLAUDE.md between markers so later audits can update it idempotently. If CLAUDE.md is missing, create it with just this block plus a one-paragraph project summary taken from the README.
 
+If the repo has no CLAUDE.md but does have an `AGENTS.md` (or its tooling reads `AGENTS.md` rather than `CLAUDE.md`), put the block in `AGENTS.md` instead. Never create a CLAUDE.md in a repo whose only conventions file is AGENTS.md — a routing block nothing reads is worse than none.
+
 Keep the block under ~50 lines; the roster and knowledge files hold the detail.
 
 ## Block template

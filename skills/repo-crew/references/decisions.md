@@ -51,7 +51,7 @@ If the repo already has ADRs, import by reference (link or copy the essentials w
 
 At the start of a task an agent scans the index and reads entries whose `areas` match its work. A request that conflicts with a locked entry results in a `needs-decision` handoff naming the D-ID, not a silent deviation and not a refusal without explanation.
 
-The docs-and-decisions keeper appends new entries only when the user states or confirms a decision during the work (it can be reported via a handoff's `knowledge-updates`).
+The docs-and-decisions keeper appends entries: `proposed` when a decision is evidenced in code, docs, or an agent's analysis (cited in the entry), and `locked` only when the user states or confirms it. It never promotes a `proposed` entry to `locked` on its own.
 
 ## Keeping it healthy
 
