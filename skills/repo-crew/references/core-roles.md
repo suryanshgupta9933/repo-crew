@@ -2,6 +2,20 @@
 
 Domain agents own slices of the repo. Cross-cutting roles own a *concern* that spans slices. Include each only when the repo gives a reason. Names below are defaults; use the repo's vocabulary when natural.
 
+Each role has a fixed agent slug, so two crews of the same shape name the same agent the same way:
+
+| Role | Slug |
+|---|---|
+| docs-and-decisions keeper | `crew-keeper` |
+| shipper | `shipper` |
+| reviewer | `reviewer` |
+| architect / planner | `architect` |
+| security & privacy | `security-review` |
+| QA / test | `qa` |
+| release / infra | `release` |
+
+Slugs are the domain's own words, never prefixed with the project name.
+
 ## Contents
 - docs-and-decisions keeper
 - shipper

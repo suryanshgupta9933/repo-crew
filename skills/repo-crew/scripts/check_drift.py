@@ -22,9 +22,15 @@ import re
 import subprocess
 import sys
 
+# The crew's own artifacts are never owned by an agent. Everything else in the
+# repo is fair game for an agent to claim -- including the repo's own docs/,
+# which is why only docs/crew/ is skipped here.
 IGNORE_UNCOVERED = (
-    "docs/", ".github/", ".claude/", ".gitignore", "LICENSE", "README", "CHANGELOG",
+    "docs/crew/", ".github/", ".claude/", ".gitignore", "LICENSE", "README", "CHANGELOG",
 )
+# Prose and assets are not path-ownership concerns; .md is skipped everywhere so
+# README/CHANGELOG prose does not drown the report. .crewignore cannot re-enable
+# them -- it only adds ignores, never removes them.
 IGNORE_SUFFIX = (".lock", ".md", ".png", ".jpg", ".jpeg", ".svg", ".ico", ".gif", ".woff", ".woff2")
 
 

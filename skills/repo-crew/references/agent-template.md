@@ -12,6 +12,8 @@
 
 Save as `.claude/agents/<slug>.md`. Keep the body under ~60 lines; push detail into the knowledge file.
 
+`<slug>` is lowercase kebab-case naming the domain, without a project-name prefix: `backend-api`, `panel-ui`, `data-db`. One crew per repo means the project name is already implied. The slug is the agent's identity: the file name, the `name:` field, the knowledge file `docs/crew/<slug>.md` and every reference to it in the roster, ledger and routing table must all match exactly.
+
 ```markdown
 ---
 name: <slug>

@@ -5,7 +5,7 @@ license: MIT
 compatibility: Requires git and Python 3.9+. The skill follows the Agent Skills standard and runs in Claude Code or any Agent Skills client; the agents it generates target .claude/agents/.
 metadata:
   author: Suryansh Gupta
-  version: "0.1.0"
+  version: "0.1.1"
 ---
 
 # repo-crew
@@ -100,6 +100,7 @@ Every path that no agent owns on purpose (generated code, vendored trees, throwa
 
 Rules that make the crew work:
 
+- **Name agents `<domain-slug>`, never `<project>-<domain-slug>`.** Lowercase kebab-case: `backend-api`, `panel-ui`, `data-db` — not `myapp-backend-api`. The crew lives in exactly one repo, so the project name is already implied; a prefix only adds noise to every dispatch, every routing-table row, and every decision's `areas:` list. Keep cross-cutting roles at their conventional names: `shipper`, `crew-keeper`, `architect`, `reviewer`, `security-review`, `qa`. The agent file name, the `name:` field and the knowledge file name must all be the same slug (`<slug>.md` ↔ `docs/crew/<slug>.md`).
 - **Agent prompts stay short; knowledge lives in the knowledge file.** The prompt is paid for on every dispatch and is hard to keep current. The knowledge file is read on demand, edited by the owning agent, and checkable by script.
 - **Agent `description` fields are the router.** Write them as "use when / not for" with concrete trigger words from the repo's own vocabulary, and make them a little pushy ("use proactively when..."), because under-triggering is the common failure.
 - **Least privilege tools.** Reviewers and architects are read-only; only owners and the shipper get Edit/Bash. Note: if `memory: project` is used, the agent needs Write/Edit for its notes, and if its tools are an allowlist, include them.

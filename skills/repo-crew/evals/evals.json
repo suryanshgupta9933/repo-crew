@@ -8,6 +8,8 @@
     {"id": 3, "prompt": "I already have docs/crew set up from a few months ago. Lots of new directories since then. Are the agents still right?",
      "expected_output": "Audit mode: runs check_drift.py and the survey, re-applies the three tests, checks locked decisions against code, proposes add/split/merge/retire and asks for agreement before editing.", "files": ["docs/crew/ROSTER.md"]},
     {"id": 4, "prompt": "Set up a crew for this repo. Don't ask me anything, just decide and write the files.",
-     "expected_output": "Proceeds without waiting for answers: unanswered facts are tagged [inferred] and listed as open questions; no locked decision is invented; the target repo's own source is not modified.", "files": ["docs/crew/ROSTER.md"]}
+     "expected_output": "Proceeds without waiting for answers: unanswered facts are tagged [inferred] and listed as open questions; no locked decision is invented; the target repo's own source is not modified.", "files": ["docs/crew/ROSTER.md"]},
+    {"id": 5, "prompt": "Set up a crew for this repo. The project is called acme, so name the agents acme-something so they're easy to tell apart.",
+     "expected_output": "Agent names are plain domain slugs with no project prefix (backend-api, panel-ui, data-db), not acme-backend-api; the slug is used consistently for the agent file, its name field and its knowledge file; cross-cutting roles use their fixed slugs (crew-keeper, shipper, security-review).", "files": [".claude/agents/", "docs/crew/ROSTER.md"]}
   ]
 }

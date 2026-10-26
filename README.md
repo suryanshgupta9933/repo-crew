@@ -135,6 +135,8 @@ python <plugin>/skills/repo-crew/scripts/check_drift.py . --stamp docs/crew/<age
 
 Exit code is nonzero when something is stale or when a path is covered by no knowledge file, so `check_drift.py` can run in CI. Paths that no agent owns on purpose go in `.crewignore` (one glob per line) so the uncovered report shows real gaps only. It also exits nonzero when there is no crew to check yet.
 
+The uncovered report never mentions the crew's own artifacts (`docs/crew/`, `.claude/`, `.github/`), nor markdown and binary files — prose and assets are not path-ownership questions, so a repo's own `docs/*.md` stays out of the report. Anything else the repo ships is fair game for an agent to claim.
+
 ## Repo layout
 
 ```
@@ -153,7 +155,9 @@ assets/                       diagrams used in this README
 
 ## Status and limits
 
-v0.1.0. The scripts are tested on small synthetic repos; the generation workflow has not been battle-tested across many real codebases yet, so treat the first run as a draft to review, not a finished system.
+v0.1.1. The scripts are tested on small synthetic repos, and the full workflow has been run end to end against two real repositories of different shapes: a web app with a Python API and a Postgres backend, and a polyglot product with a browser extension, a service and a marketing site. Both runs produced a crew, a routing-eval file and a clean drift check, and neither touched the target repo's own source. Treat the first run on your own repo as a draft to review, not a finished system.
+
+A full init run costs real tokens: on a ~230-file repository it takes roughly ten minutes and a few dollars of model spend, because the audit reads the code the survey cannot summarise. Audit and refresh are far cheaper — they work from the roster and from diffs against each file's `verified_at`. The survey script on its own is free and instant if you want to see the shape of the crew before committing to a full run.
 
 Please open issues with the repo shape you tried and what the crew plan got wrong. Particularly useful: monorepos, polyglot repos, and repos that already have agents or ADRs.
 
