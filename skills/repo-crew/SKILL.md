@@ -5,7 +5,7 @@ license: MIT
 compatibility: Requires git and Python 3.9+. The skill follows the Agent Skills standard and runs in Claude Code or any Agent Skills client; the agents it generates target .claude/agents/.
 metadata:
   author: Suryansh Gupta
-  version: "0.1.1"
+  version: "0.1.2"
 ---
 
 # repo-crew

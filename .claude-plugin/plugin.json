@@ -1,7 +1,7 @@
 {
   "name": "repo-crew",
   "displayName": "repo-crew",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Audit your codebase and generate a crew of specialist subagents, an orchestrator routing block in CLAUDE.md, committed per-domain knowledge files, a locked-decisions ledger, and a shipping gate. The audit decides how many agents you need.",
   "author": {
     "name": "Suryansh Gupta",

@@ -65,6 +65,8 @@ Be a little pushy: under-triggering is the usual failure.
 
 Save as `docs/crew/<slug>.md`.
 
+`covers` globs are matched against repo-relative paths and are anchored at the repo root: `src/**` means `src/…`, and `plugin.json` means the file at the root, not any file with that name. Use `**/` when a name can appear at any depth.
+
 ```markdown
 ---
 name: <slug>

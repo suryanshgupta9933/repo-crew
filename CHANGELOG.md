@@ -5,6 +5,12 @@ All notable changes to this project are documented here.
 The version here must match `version` in `.claude-plugin/plugin.json`. Marketplace installs stay pinned
 to that string until it changes, so a release without a bump reaches nobody.
 
+## 0.1.2
+
+- Fixed a glob bug in `check_drift.py`: `lstrip("./")` stripped *any* leading dots, so a cover written `.claude-plugin/**` was rewritten to `claude-plugin/**` and silently matched nothing. Only a leading `./` is stripped now. Found by running the skill on this repo.
+- Added `tests/` with a regression check for the glob translation and frontmatter parsing, and a CI step to run it.
+- Documented that `covers` globs are anchored at the repo root.
+
 ## 0.1.1
 
 - Drift checker no longer skips all of `docs/` — only the crew's own `docs/crew/`. A repo's own `docs/` is now eligible for an agent to own, and shows up in the uncovered report when nobody does.

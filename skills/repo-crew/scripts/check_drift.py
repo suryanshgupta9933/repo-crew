@@ -61,7 +61,9 @@ def parse_frontmatter(text):
 
 
 def glob_to_regex(g):
-    g = g.strip().lstrip("./")
+    g = g.strip()
+    if g.startswith("./"):
+        g = g[2:]
     if g.endswith("/"):
         g += "**"
     out, i = "", 0

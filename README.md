@@ -150,7 +150,8 @@ skills/repo-crew/
   evals/evals.json            example prompts with expected behaviour
 examples/sample-output/       illustrative output for a made-up project
 assets/                       diagrams used in this README
-.github/workflows/            CI: manifest validation, script compile, version sync
+tests/                        unit tests for the scripts
+.github/workflows/            CI: manifest validation, script compile, unit tests, version sync
 ```
 
 ## Status and limits

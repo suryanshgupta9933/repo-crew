@@ -80,6 +80,9 @@ jobs:
           # and exits nonzero by design. Assert that a report was produced.
           python skills/repo-crew/scripts/check_drift.py examples/sample-output --json | grep -q '"knowledge"'
 
+      - name: Unit tests
+        run: python -m unittest discover -s tests
+
       - name: Plugin manifest validates
         run: |
           npm install -g @anthropic-ai/claude-code
